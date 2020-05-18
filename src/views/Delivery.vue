@@ -14,11 +14,11 @@
                   <label for="email"  class="textbox">Email</label>
                 </div>
                 <div class="input-group">
-                  <input type="text" name="phone" required>
-                  <label for="phone"  class="textbox">Phone Number</label>
+                  <input type="text" pattern="^[0-9-+\s()]*$" minlength="6" maxlength="20" name="phone" required>
+                  <label for="phone" class="textbox">Phone Number</label>
                 </div>
                 <div class="input-group">
-                  <textarea rows="6" cols="50" type="text" name="address" class="textarea" required></textarea>
+                  <textarea rows="6" cols="50" maxlength="120" type="text" name="address" class="textarea" required></textarea>
                   <label for="address" class="textbox">Delivery address</label>
                 </div>
               </div>
@@ -49,10 +49,10 @@
         <div class="container">
           <h3>Summary</h3>
           <p>10 items purchased</p>
-          <p class="cost">Cost of goods <span class="price">500,000</span></p>
+          <p class="cost">Cost of goods <span class="price">{{ Cost }}</span></p>
           <p>Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
           <hr>
-          <h3>Total <span class="price" style="color: #FF8A00;">505,900</span></h3>
+          <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
           <input type="submit" value="Continue to Payment" class="btn">
         </div>
       </div>
@@ -72,10 +72,25 @@ export default {
   data () {
     return {
       checked: false,
-      dropshippingFee: 5900
+      dropshippingFee: 5900,
+      Cost: 500000,
+      total: 0
     }
   },
   methods: {
+    formatPrice (value) {
+      const val = (value / 1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    },
+    totalCost () {
+      if (this.checked) {
+        this.total = this.Cost + this.dropshippingFee
+      } else {
+        this.total = this.Cost
+      }
+
+      return this.formatPrice(this.total)
+    }
   }
 }
 </script>
@@ -244,6 +259,7 @@ input[type="text"],input[type="tel"],input[type="email"] {
 
 textarea {
   font-family: Inter;
+  border: 1px solid #ccc;
   font-size: 16px;
   border-radius: 3px;
   padding-left: 13px;
