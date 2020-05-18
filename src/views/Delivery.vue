@@ -8,24 +8,38 @@
             <div class="row">
               <div class="col-50">
                 <a href="" class="link-to-cart"><p class="back">&#8592; Back to cart</p></a>
-                <h1 class="delivery">Delivery details</h1>
-                <!-- <div> -->
-                  <input type="email" id="email" name="email" placeholder="Email" required>
-                  <!-- <label for="email" placeholder="Email"></label> -->
-                <!-- </div> -->
-                <input type="text" id="phone" name="phone" placeholder="Phone Number">
-                <textarea rows="6" cols="50" type="text" id="adr" name="address" placeholder="Delivery Address" class="textarea"></textarea>
+                <h1 class="delivery underline">Delivery details</h1>
+                <div class="input-group">
+                  <input type="email" name="email" required>
+                  <label for="email"  class="textbox">Email</label>
+                </div>
+                <div class="input-group">
+                  <input type="text" name="phone" required>
+                  <label for="phone"  class="textbox">Phone Number</label>
+                </div>
+                <div class="input-group">
+                  <textarea rows="6" cols="50" type="text" name="address" class="textarea" required></textarea>
+                  <label for="address" class="textbox">Delivery address</label>
+                </div>
               </div>
               <div class="col-50 dropshipper">
-                <div  style="float: right;" class="send-as">
-                  <label class="check-dropshipper">
+                <div class="checkbox-container" name="checked" @input="checked = $event.target.checked" >
+                  <label class="checkbox-label">
                     <input type="checkbox">
-                    <span class="checkmark"></span>
-                    <p class="send-as-dropshipper">Send as dropshipper</p>
+                    <span class="checkbox-custom rectangular"></span>
+                     <span class="send-as">Send as dropshipper </span>
                   </label>
                 </div>
-                <input type="text" id="cname" name="cardname" placeholder="Dropshipper Name">
-                <input type="tel" id="phonenumber" name="phonenumber" placeholder="1111-2222-3333-4444">
+                <div v-show="checked">
+                  <div class="input-group">
+                    <input type="text" name="dropshipper-name" required>
+                    <label for="dropshipper-name" class="input-dropshipper textbox">Dropshipper Name</label>
+                  </div>
+                  <div class="input-group">
+                    <input type="tel" name="dropshipper-phone" required>
+                    <label for="dropshipper-phone" class="input-dropshipper textbox">Dropshipper phone number</label>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
@@ -54,12 +68,17 @@ export default {
   name: 'Delivery',
   components: {
     BreadcrumbNav
+  },
+  data () {
+    return {
+      checked: false
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-  .row {
+.row {
   display: -ms-flexbox; /* IE10 */
   display: flex;
   -ms-flex-wrap: wrap; /* IE10 */
@@ -73,6 +92,12 @@ export default {
   font-size: 36px;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
+}
+
+.underline {
+  display: inline-block;
+  border-bottom: 2px solid #EEEEEE;
+  border-width: 5px;
 }
 
 .box {
@@ -91,62 +116,6 @@ export default {
 .col-50 {
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
-  /* margin-top: 50px; */
-}
-
-/* Checkbox */
-.check-dropshipper {
-  display: block;
-  position: relative;
-  padding-left: 80px;
-  cursor: pointer;
-  padding-bottom: 2px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.check-dropshipper input[type="checkbox"] {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 16px;
-  width: 16px;
-  border: 2px solid #1BD97B;
-}
-
-.check-dropshipper:hover input ~ .checkmark {
-  background-color: rgba(27, 217, 123, 0.5);
-}
-
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-.check-dropshipper input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.check-dropshipper .checkmark:after {
-  left: 3px;
-  width: 4px;
-  height: 8px;
-  border: solid #1BD97B;
-  border-width: 0 2px 2px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
 }
 
 .link-to-cart {
@@ -172,13 +141,82 @@ p.back {
 
 .dropshipper {
   padding: 0;
-  margin-top: 40px;
+  margin-top: 50px;
+}
+
+// Checkbox
+.checkbox-container {
+  box-sizing: border-box;
+  color: rgba(45, 42, 64, 0.8);
+  margin-top: 55px;
+  margin-bottom: 28px;
+  margin-left: 260px;
+}
+
+.checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkbox-label .checkbox-custom {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border: 2px solid #FF8A00;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+}
+
+.checkbox-label .checkbox-custom::after {
+  position: absolute;
+  content: "";
+  left: 6px;
+  top: 6px;
+  height: 0px;
+  width: 0px;
+  border: solid #1BD97B;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(0deg) scale(0);
+  -ms-transform: rotate(0deg) scale(0);
+  transform: rotate(0deg) scale(0);
+  opacity: 1;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+}
+
+.checkbox-label input:checked ~ .checkbox-custom {
+  -webkit-transform: rotate(0deg) scale(1);
+  -ms-transform: rotate(0deg) scale(1);
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+  border: 2px solid #1BD97B;
 }
 
 .send-as {
-  color: rgba(45, 42, 64, 0.8);
-  margin-bottom: 2px;
-  margin-top: 12px;
+  padding-left: 26px;
+  font-size: 14px;
+}
+
+.checkbox-label input:checked ~ .checkbox-custom::after {
+  -webkit-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+  opacity: 1;
+  left: 4px;
+  top: -1px;
+  width: 6px;
+  height: 12px;
+  border: solid #1BD97B;
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
 }
 
 .container {
@@ -187,49 +225,49 @@ p.back {
 }
 
 // Textbox
-input[type="text"], input[type="tel"],input[type="email"] {
+.input-group {
+  position: relative;
+  margin: 10px 5px 10px 0;
+}
+
+input[type="text"],input[type="tel"],input[type="email"] {
   height: 55px;
   width: 100%;
-  padding-left: 10px;
   font-size: 16px;
-  margin-bottom: 20px;
-  padding: 12px;
+  padding: 13px;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
 
-label {
-  margin-top: -40px;
-  margin-left: 10px;
-}
-
-input[type="text"]+label {
-  font-size: 16px;
-  /* margin-top: -1.2em; */
-  display: block;
-  /* pointer-events: none; */
-}
-
-input[type="text"]+label:before {
-  content: attr(placeholder);
-  color: #898989;
-  display: inline-block;
-  transition: all .3s ease-in-out;
-}
-
 textarea {
+  font-family: Inter;
+  font-size: 16px;
   border-radius: 3px;
-  padding: 10px;
+  padding-left: 13px;
+  padding-top: 20px;
+  width: 100%;
+  resize: none;
 }
 
-label {
-  margin-bottom: 10px;
-  display: block;
+label.textbox, .input-group .input-dropshipper{
+  color: #999;
+  padding-left: 10px;
+  font-size: 16px;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 18px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
 }
 
-input[type="text"]:focus+label:before {
-  color: #287ae6;
-  transform: translate(0, -1.2em) scale(0.8, 0.8);
+input:focus ~ label,
+textarea:focus ~ label,
+input:valid ~ label,
+textarea:valid + label {
+  transform: translate3d(0, -100%, 0);
+  font-size: 14px;
 }
 
 .icon-container {
@@ -263,10 +301,14 @@ span.price {
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
 @media (max-width: 800px) {
   .row {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .col-25 {
     margin-bottom: 20px;
+  }
+
+  p.back {
+    margin-top: 40px;
   }
 
   .container-title {

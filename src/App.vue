@@ -12,7 +12,6 @@ body {
   font-family: 'Inter', Arial, sans-serif;
   font-size: 17px;
   padding: 8px;
-  // background-color: #FFFAE6;
   margin: 10px 50px ;
 }
 
