@@ -23,9 +23,9 @@
                 </div>
               </div>
               <div class="col-50 dropshipper">
-                <div class="checkbox-container" name="checked" @input="checked = $event.target.checked" >
+                <div class="checkbox-container" name="checked">
                   <label class="checkbox-label">
-                    <input type="checkbox">
+                    <input type="checkbox" v-model="checked">
                     <span class="checkbox-custom rectangular"></span>
                      <span class="send-as">Send as dropshipper </span>
                   </label>
@@ -50,7 +50,7 @@
           <h3>Summary</h3>
           <p>10 items purchased</p>
           <p class="cost">Cost of goods <span class="price">500,000</span></p>
-          <p>Dropshipper Fee <span class="price">5,900</span></p>
+          <p>Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">505,900</span></h3>
           <input type="submit" value="Continue to Payment" class="btn">
@@ -71,8 +71,11 @@ export default {
   },
   data () {
     return {
-      checked: false
+      checked: false,
+      dropshippingFee: 5900
     }
+  },
+  methods: {
   }
 }
 </script>
