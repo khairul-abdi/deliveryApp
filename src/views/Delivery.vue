@@ -47,7 +47,7 @@
         </div>
         <div class="col-25">
           <div class="container">
-            <h3>Summary</h3>
+            <h3 class="summary-title">Summary</h3>
             <p>10 items purchased</p>
             <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
             <p>Dropshipping Fee <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span></p>
@@ -78,22 +78,7 @@ export default {
       Cost: 500000,
       total: 0,
       email: '',
-      msg: [],
-      shipments: [{
-        courier: 'GO-SEND',
-        price: 15000,
-        deliveryEstimate: 'today'
-      },
-      {
-        courier: 'JNE',
-        price: 9000,
-        deliveryEstimate: '2 days'
-      },
-      {
-        courier: 'Personal Courier',
-        price: 29000,
-        deliveryEstimate: '1 day'
-      }]
+      msg: []
     }
   },
   methods: {
@@ -272,6 +257,11 @@ p.back {
 .container {
   padding: 5px 20px 15px 20px;
   border-radius: 3px;
+}
+
+.summary-title {
+  margin-top: 40px;
+  margin-bottom: 10px;
 }
 
 // Textbox

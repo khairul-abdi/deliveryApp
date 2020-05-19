@@ -7,51 +7,44 @@
           <a href="" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
             <h1 class="delivery underline">Shipment</h1>
             <div class="row wrap">
-              <div class="box-courier clicked">
+              <!-- <div class="box-courier clicked">
                 <div class="title">
                   <div class="box-name box-name-clicked">GO-SEND</div>
                   <div  class="box-price box-price-clicked">15,000</div>
                 </div>
-                <div class="check clicked-check">
-                  <i class="fas fa-check"></i>
-                </div>
-              </div>
-              <div class="box-courier">
-                <div class="title">
-                  <div class="box-name">GO-SEND</div>
-                  <div class="box-price">15,000</div>
-                </div>
                 <div class="check">
                   <i class="fas fa-check"></i>
                 </div>
-              </div>
-              <div class="box-courier">
+              </div> -->
+
+              <div
+                class="box-courier"
+                v-for="(shipment, index) in shipments"
+                :key=index
+                @click="shipmentSelect(index)"
+              >
                 <div class="title">
-                  <div class="box-name">GO-SEND</div>
-                  <div class="box-price">15,000</div>
+                  <div class="box-name">{{ shipment.courier }}</div>
+                  <div class="box-price">{{ formatPrice(shipment.price) }}</div>
                 </div>
-                <div class="check">
+
+                <!-- <div>
                   <i class="fas fa-check"></i>
-                </div>
-              </div>
-              <div class="box-courier">
-                <div class="title">
-                  <div class="box-name">GO-SEND</div>
-                  <div class="box-price">15,000</div>
-                </div>
-                <div class="check">
-                  <i class="fas fa-check"></i>
-                </div>
+                </div> -->
               </div>
             </div>
         </div>
       </div>
       <div class="col-25">
         <div class="container">
-          <h3>Summary</h3>
-          <p>10 items purchased</p>
-          <p class="cost">Cost of goods <span class="price">{{ Cost }}</span></p>
-          <p>Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
+          <h3 class="summary-title">Summary</h3>
+          <p class="items-purchased">10 items purchased</p>
+          <hr class="line">
+          <p class="dev-estimation">Delivery estimation</p>
+          <p class="courier-send">today by GO-SEND</p>
+          <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
+          <p class="dropshipping">Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
+          <p class="shipment-price"><span style="font-weight: bold;">GO-SEND</span> shipment <span class="price">{{ formatPrice(priceCourier) }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
           <input type="submit" value="Continue to Payment" class="btn">
@@ -76,8 +69,24 @@ export default {
       dropshippingFee: 5900,
       Cost: 500000,
       total: 0,
+      priceCourier: 0,
       email: '',
-      msg: []
+      msg: [],
+      shipments: [{
+        courier: 'GO-SEND',
+        price: 15000,
+        deliveryEstimate: 'today'
+      },
+      {
+        courier: 'JNE',
+        price: 9000,
+        deliveryEstimate: '2 days'
+      },
+      {
+        courier: 'Personal Courier',
+        price: 29000,
+        deliveryEstimate: '1 day'
+      }]
     }
   },
   methods: {
@@ -87,7 +96,7 @@ export default {
     },
     totalCost () {
       if (this.checked) {
-        this.total = this.Cost + this.dropshippingFee
+        this.total = this.Cost + this.dropshippingFee + this.priceCourier
       } else {
         this.total = this.Cost
       }
@@ -100,6 +109,10 @@ export default {
       // } else {
       //   this.msg.email = 'Invalid Email Address'
       // }
+    },
+    shipmentSelect (index) {
+      console.log(index)
+      this.priceCourier = this.shipments[index].price
     }
   },
   watch: {
@@ -136,6 +149,7 @@ export default {
   padding-left: 15px;
   font-weight: 500;
   display: flex;
+  cursor: pointer;
 }
 
 .title {
@@ -145,32 +159,25 @@ export default {
 .check {
   width: 20%;
   padding-top: 20px;
-  // border: 1px solid black;
+  color: #1BD97B;
 }
 
 .box-name {
   padding-top: 8px;
   color: rgba(0, 0, 0, 0.6);
   padding-bottom: 2px;
-  // border: 1px solid blue;
-
 }
 
 .box-price {
   font-weight: bold;
   color: rgba(45, 42, 64, 0.6);
   font-size: 16px;
-  // border: 1px solid red;
 }
 
 // Success Click
 .clicked {
   border: 2px solid #1BD97B;
   background-color: rgba(27, 217, 123, 0.1);;
-}
-
-.clicked-check {
-  color: #1BD97B;
 }
 
 .box-price-clicked {
@@ -200,10 +207,6 @@ color: black;
 .col-25 {
   -ms-flex: 25%; /* IE10 */
   flex: 25%;
-}
-
-.cost {
-  margin-top: 180px;
 }
 
 .col-50 {
@@ -238,14 +241,53 @@ p.back {
   padding: 0 10px;
 }
 
-.send-as {
-  padding-left: 26px;
-  font-size: 14px;
-}
-
 .container {
   padding: 5px 20px 15px 20px;
   border-radius: 3px;
+}
+
+.items-purchased {
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.summary-title {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.line {
+  width: 80px;
+  border: 1px solid #D8D8D8;
+  margin-left: 0;
+  margin-top: 20px;
+}
+
+.dev-estimation {
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.courier-send {
+  font-weight: 500;
+  font-size: 16px;
+  color: #1BD97B;
+}
+
+.cost {
+  margin-top: 92px;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.dropshipping {
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.shipment-price {
+  font-size: 14px;
+  opacity: 0.6;
 }
 
 .btn {
