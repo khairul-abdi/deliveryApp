@@ -1,67 +1,69 @@
 <template>
   <div>
     <BreadcrumbNav/>
-    <div class="row box">
-      <div class="col-75">
-        <div class="container">
-          <form action="">
-            <div class="row">
-              <div class="col-50">
-                <a href="" class="link-to-cart"><p class="back">&#8592; Back to cart</p></a>
-                <h1 class="delivery underline">Delivery details</h1>
-                <div class="input-group">
-                  <input type="email" name="email" required>
-                  <label for="email"  class="textbox">Email</label>
-                </div>
-                <div class="input-group">
-                  <input type="text" pattern="^[0-9-+\s()]*$" minlength="6" maxlength="20" name="phone" required>
-                  <label for="phone" class="textbox">Phone Number</label>
-                </div>
-                <div class="input-group">
-                  <textarea rows="6" cols="50" maxlength="120" type="text" name="address" class="textarea" required></textarea>
-                  <label for="address" class="textbox">Delivery address</label>
-                </div>
-              </div>
-              <div class="col-50 dropshipper">
-                <div class="checkbox-container" name="checked">
-                  <label class="checkbox-label">
-                    <input type="checkbox" v-model="checked">
-                    <span class="checkbox-custom rectangular"></span>
-                     <span class="send-as">Send as dropshipper </span>
-                  </label>
-                </div>
-                <div v-show="checked">
+    <form action="">
+      <div class="row box">
+        <div class="col-75">
+          <div class="container">
+              <div class="row">
+                <div class="col-50">
+                  <a href="" class="link-to-cart"><p class="back">&#8592; Back to cart</p></a>
+                  <h1 class="delivery underline">Delivery details</h1>
                   <div class="input-group">
-                    <input type="text" name="dropshipper-name" required>
-                    <label for="dropshipper-name" class="input-dropshipper textbox">Dropshipper Name</label>
+                    <input type="text" v-model="email" name="email" required>
+                    <label for="email" class="textbox">Email</label>
+                    <span v-if="msg.email" class="messages">{{msg.email}}</span>
                   </div>
                   <div class="input-group">
-                    <input type="tel" name="dropshipper-phone" required>
-                    <label for="dropshipper-phone" class="input-dropshipper textbox">Dropshipper phone number</label>
+                    <input type="text" pattern="^[0-9-+\s()]*$" minlength="6" maxlength="20" name="phone" required>
+                    <label for="phone" class="textbox">Phone Number</label>
+                  </div>
+                  <div class="input-group">
+                    <textarea rows="6" cols="50" maxlength="120" type="text" name="address" class="textarea" required></textarea>
+                    <label for="address" class="textbox">Delivery address</label>
+                  </div>
+                </div>
+                <div class="col-50 dropshipper">
+                  <div class="checkbox-container" name="checked">
+                    <label class="checkbox-label">
+                      <input type="checkbox" v-model="checked">
+                      <span class="checkbox-custom"></span>
+                      <span class="send-as">Send as dropshipper </span>
+                    </label>
+                  </div>
+                  <div v-show="checked">
+                    <div class="input-group">
+                      <input type="text" name="dropshipper-name" required>
+                      <label for="dropshipper-name" class="input-dropshipper textbox">Dropshipper Name</label>
+                    </div>
+                    <div class="input-group">
+                      <input type="tel" name="dropshipper-phone" required>
+                      <label for="dropshipper-phone" class="input-dropshipper textbox">Dropshipper phone number</label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
+          </div>
+        </div>
+        <div class="col-25">
+          <div class="container">
+            <h3>Summary</h3>
+            <p>10 items purchased</p>
+            <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
+            <p>Dropshipping Fee <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span></p>
+            <hr>
+            <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
+            <input type="submit" value="Continue to Payment" class="btn">
+          </div>
         </div>
       </div>
-      <div class="col-25">
-        <div class="container">
-          <h3>Summary</h3>
-          <p>10 items purchased</p>
-          <p class="cost">Cost of goods <span class="price">{{ Cost }}</span></p>
-          <p>Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
-          <hr>
-          <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-          <input type="submit" value="Continue to Payment" class="btn">
-        </div>
-      </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 
 export default {
@@ -74,7 +76,24 @@ export default {
       checked: false,
       dropshippingFee: 5900,
       Cost: 500000,
-      total: 0
+      total: 0,
+      email: '',
+      msg: [],
+      shipments: [{
+        courier: 'GO-SEND',
+        price: 15000,
+        deliveryEstimate: 'today'
+      },
+      {
+        courier: 'JNE',
+        price: 9000,
+        deliveryEstimate: '2 days'
+      },
+      {
+        courier: 'Personal Courier',
+        price: 29000,
+        deliveryEstimate: '1 day'
+      }]
     }
   },
   methods: {
@@ -90,6 +109,19 @@ export default {
       }
 
       return this.formatPrice(this.total)
+    },
+    validateEmail (value) {
+      // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+      //   this.msg.email = ''
+      // } else {
+      //   this.msg.email = 'Invalid Email Address'
+      // }
+    }
+  },
+  watch: {
+    email (value) {
+      this.email = value
+      this.validateEmail(value)
     }
   }
 }
@@ -119,7 +151,7 @@ export default {
 }
 
 .box {
-  box-shadow: 0 3px 20px rgba(253, 140, 63, 0.2);
+  box-shadow: 0 3px 20px rgba(253, 140, 63, 0.3);
 }
 
 .col-25 {
@@ -287,12 +319,6 @@ input:valid ~ label,
 textarea:valid + label {
   transform: translate3d(0, -100%, 0);
   font-size: 14px;
-}
-
-.icon-container {
-  margin-bottom: 20px;
-  padding: 7px 0;
-  font-size: 24px;
 }
 
 .btn {

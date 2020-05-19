@@ -1,9 +1,15 @@
 <template>
   <div class="container-title">
     <ul class="breadcrumb">
-      <li><a href="#"><span class="circle">1 </span> Delivery</a></li>
-      <li><a href="#"><span class="circle">2 </span> Payment</a></li>
-      <li><a href="#"><span class="circle">3 </span> Finish</a></li>
+      <li>
+        <router-link to="/"><span class="circle">1 </span> Delivery</router-link>
+      </li>
+      <li>
+        <router-link to="/payment"><span class="circle">2 </span> Payment</router-link>
+      </li>
+      <li>
+        <router-link to="/finish"><span class="circle">3 </span> Finish</router-link>
+      </li>
     </ul>
   </div>
 </template>
