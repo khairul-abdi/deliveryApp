@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Delivery from '../views/Delivery.vue'
 import Payment from '../views/Payment.vue'
+import Finish from '../views/Finish.vue'
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,9 @@ const routes = [
     component: Payment
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/finish',
+    name: 'Finish',
+    component: Finish
   }
 ]
 

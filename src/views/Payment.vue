@@ -27,10 +27,9 @@
                   <div class="box-name">{{ shipment.courier }}</div>
                   <div class="box-price">{{ formatPrice(shipment.price) }}</div>
                 </div>
-
-                <!-- <div>
+                <div class="check" v-show="show">
                   <i class="fas fa-check"></i>
-                </div> -->
+                </div>
               </div>
             </div>
         </div>
@@ -44,7 +43,7 @@
           <p class="courier-send">today by GO-SEND</p>
           <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
           <p class="dropshipping">Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
-          <p class="shipment-price"><span style="font-weight: bold;">GO-SEND</span> shipment <span class="price">{{ formatPrice(priceCourier) }}</span></p>
+          <p class="shipment-price" v-if="price"><span style="font-weight: bold;">{{ courier }}</span> shipment <span class="price">{{ price ? formatPrice(price) : 0 }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
           <input type="submit" value="Continue to Payment" class="btn">
@@ -69,9 +68,11 @@ export default {
       dropshippingFee: 5900,
       Cost: 500000,
       total: 0,
-      priceCourier: 0,
+      courier: '',
+      price: 0,
       email: '',
       msg: [],
+      show: false,
       shipments: [{
         courier: 'GO-SEND',
         price: 15000,
@@ -95,8 +96,8 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
     totalCost () {
-      if (this.checked) {
-        this.total = this.Cost + this.dropshippingFee + this.priceCourier
+      if (this.price) {
+        this.total = this.Cost + this.dropshippingFee + this.price
       } else {
         this.total = this.Cost
       }
@@ -111,8 +112,11 @@ export default {
       // }
     },
     shipmentSelect (index) {
-      console.log(index)
-      this.priceCourier = this.shipments[index].price
+      // console.log(index)
+      this.price = this.shipments[index].price
+      this.courier = this.shipments[index].courier
+      this.show = !this.show
+      this.totalCost()
     }
   },
   watch: {
