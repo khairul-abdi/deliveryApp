@@ -6,54 +6,42 @@
         <div class="container">
           <a href="" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
             <h1 class="delivery underline">Shipment</h1>
-            <div class="row wrap" style="width: 100%;">
-                <div class="box-courier clicked">
-                  <div>
-                    <div class="box-name box-name-clicked">GO-SEND</div>
-                    <div  class="box-price box-price-clicked">15,000</div>
-                  </div>
-                  <div class="check clicked-check">
-                    <i class="fas fa-check"></i>
-                  </div>
+            <div class="row wrap">
+              <div class="box-courier clicked">
+                <div class="title">
+                  <div class="box-name box-name-clicked">GO-SEND</div>
+                  <div  class="box-price box-price-clicked">15,000</div>
                 </div>
-                <div class="box-courier">
-                  <div>
-                    <div class="box-name">GO-SEND</div>
-                    <div class="box-price">15,000</div>
-                  </div>
-                  <div class="check">
-                    <i class="fas fa-check"></i>
-                  </div>
+                <div class="check clicked-check">
+                  <i class="fas fa-check"></i>
                 </div>
-                <div class="box-courier">
-                  <div>
-                    <div class="box-name">GO-SEND</div>
-                    <div class="box-price">15,000</div>
-                  </div>
-                  <div class="check">
-                    <i class="fas fa-check"></i>
-                  </div>
+              </div>
+              <div class="box-courier">
+                <div class="title">
+                  <div class="box-name">GO-SEND</div>
+                  <div class="box-price">15,000</div>
                 </div>
-                 <div class="box-courier">
-                  <div>
-                    <div class="box-name">GO-SEND</div>
-                    <div class="box-price">15,000</div>
-                  </div>
-                  <div class="check">
-                    <i class="fas fa-check"></i>
-                  </div>
+                <div class="check">
+                  <i class="fas fa-check"></i>
                 </div>
-                 <div class="box-courier">
-                  <div>
-                    <div class="box-name">GO-SEND</div>
-                    <div class="box-price">15,000</div>
-                  </div>
-                  <div class="check">
-                    <i class="fas fa-check"></i>
-                  </div>
+              </div>
+              <div class="box-courier">
+                <div class="title">
+                  <div class="box-name">GO-SEND</div>
+                  <div class="box-price">15,000</div>
                 </div>
-              <div class="">
-
+                <div class="check">
+                  <i class="fas fa-check"></i>
+                </div>
+              </div>
+              <div class="box-courier">
+                <div class="title">
+                  <div class="box-name">GO-SEND</div>
+                  <div class="box-price">15,000</div>
+                </div>
+                <div class="check">
+                  <i class="fas fa-check"></i>
+                </div>
               </div>
             </div>
         </div>
@@ -147,20 +135,24 @@ export default {
   height: 60px;
   padding-left: 15px;
   font-weight: 500;
+  display: flex;
+}
+
+.title {
+  width: 80%;
 }
 
 .check {
-  float: right;
-  padding-right: 21px;
-  align-items: center;
-  border: 1px solid black;
+  width: 20%;
+  padding-top: 20px;
+  // border: 1px solid black;
 }
 
 .box-name {
-  padding-top: 13px;
+  padding-top: 8px;
   color: rgba(0, 0, 0, 0.6);
   padding-bottom: 2px;
-  border: 1px solid blue;
+  // border: 1px solid blue;
 
 }
 
@@ -168,7 +160,7 @@ export default {
   font-weight: bold;
   color: rgba(45, 42, 64, 0.6);
   font-size: 16px;
-  border: 1px solid red;
+  // border: 1px solid red;
 }
 
 // Success Click
@@ -281,7 +273,9 @@ span.price {
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
 @media (max-width: 800px) {
   .row {
-    flex-direction: column;
+    // flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   .col-25 {
     margin-bottom: 20px;
@@ -293,6 +287,11 @@ span.price {
 
   .container-title {
     width: 100%;
+  }
+
+  .wrap {
+    flex-wrap: wrap;
+    padding: 0 10px;
   }
 }
 </style>
