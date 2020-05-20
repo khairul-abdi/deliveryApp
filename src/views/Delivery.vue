@@ -1,7 +1,7 @@
 <template>
   <div>
     <BreadcrumbNav/>
-    <form action="">
+    <form id="app" action="/payment" method="post">
       <div class="row box">
         <div class="col-75">
           <div class="container">
@@ -9,18 +9,22 @@
                 <div class="col-50">
                   <a href="" class="link-to-cart"><p class="back">&#8592; Back to cart</p></a>
                   <h1 class="delivery underline">Delivery details</h1>
-                  <div class="input-group">
-                    <input type="text" v-model="email" name="email" required>
-                    <label for="email" class="textbox">Email</label>
-                    <span v-if="msg.email" class="messages">{{msg.email}}</span>
+                  <div class="input-group" :class="{success: msg.email == 1, warning: msg.email == 0}">
+                    <input type="text" @input="validateEmail" v-model="email" name="email" required>
+                    <label for="email" class="textbox" :class="{'success-span': msg.email == 1, 'warning-span': msg.email == 0}">Email</label>
+                    <span v-if="msg.email == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
+                    <span v-if="msg.email == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
                   </div>
-                  <div class="input-group">
-                    <input type="text" pattern="^[0-9-+\s()]*$" minlength="6" maxlength="20" name="phone" required>
-                    <label for="phone" class="textbox">Phone Number</label>
+                  <div class="input-group" :class="{success: msg.phone == 1, warning: msg.phone == 0}">
+                    <input type="text" @input="validatePhone" v-model="phone" required>
+                    <label for="phone" class="textbox" :class="{'success-span': msg.phone == 1, 'warning-span': msg.phone == 0}">Phone Number</label>
+                   <span v-if="msg.phone == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
+                    <span v-if="msg.phone == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
                   </div>
-                  <div class="input-group">
+                  <div class="input-group" :class="{ success: success >= 3, warning: warning }">
                     <textarea rows="6" cols="50" maxlength="120" type="text" name="address" class="textarea" required></textarea>
                     <label for="address" class="textbox">Delivery address</label>
+                    <span v-if="msg.address" class="messages">{{msg.address}}</span>
                   </div>
                 </div>
                 <div class="col-50 dropshipper">
@@ -29,16 +33,19 @@
                       <input type="checkbox" v-model="checked">
                       <span class="checkbox-custom"></span>
                       <span class="send-as">Send as dropshipper </span>
+                      <span v-if="msg.sendas" class="messages">{{msg.sendas}}</span>
                     </label>
                   </div>
                   <div v-show="checked">
                     <div class="input-group">
                       <input type="text" name="dropshipper-name" required>
                       <label for="dropshipper-name" class="input-dropshipper textbox">Dropshipper Name</label>
+                      <span v-if="msg.dropShipName" class="messages">{{msg.dropShipName}}</span>
                     </div>
                     <div class="input-group">
                       <input type="tel" name="dropshipper-phone" required>
                       <label for="dropshipper-phone" class="input-dropshipper textbox">Dropshipper phone number</label>
+                      <span v-if="msg.dropShipPhone" class="messages">{{msg.dropShipPhone}}</span>
                     </div>
                   </div>
                 </div>
@@ -78,7 +85,10 @@ export default {
       Cost: 500000,
       total: 0,
       email: '',
-      msg: []
+      phone: '',
+      msg: [],
+      success: 0,
+      warning: false
     }
   },
   methods: {
@@ -96,23 +106,78 @@ export default {
       return this.formatPrice(this.total)
     },
     validateEmail (value) {
-      // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-      //   this.msg.email = ''
-      // } else {
-      //   this.msg.email = 'Invalid Email Address'
-      // }
+      const validate = (value) => {
+        const atChecker = value.indexOf('@')
+        const dotChecker = value.lastIndexOf('.')
+        const indexingChecker = atChecker < dotChecker ? 1 : 0
+
+        return atChecker !== -1 && dotChecker !== -1 ? indexingChecker : 0
+      }
+
+      if (validate(this.email)) {
+        // this.success++
+        // this.warning = false
+        this.msg.email = 1
+        console.log(this.msg.email)
+      } else {
+        // this.warning = true
+        this.msg.email = 0
+        // this.msg.email = 'Invalid Email Address'
+      }
+    },
+    validatePhone (value) {
+      if (/^[0-9-+\s()]*$/.test(value)) {
+        // this.success++
+        // this.warning = false
+        this.msg.phone = 1
+      } else {
+        // this.warning = true
+        this.msg.phone = 0
+      }
     }
   },
   watch: {
-    email (value) {
-      this.email = value
-      this.validateEmail(value)
-    }
+    // email (value) {
+    //   this.email = value
+    //   this.validateEmail(value)
+    // }
   }
 }
 </script>
 
 <style scoped lang="scss">
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+
+.messages {
+  color: #FF8A00;
+  font-size: 12px;
+  padding-left: 10px;
+}
+
+.InputAddOn-item {
+  margin-left: -30px;
+}
+
+.success {
+  color: #1BD97B;
+  border: 1px solid #1BD97B;
+}
+
+.success-span {
+  color: #1BD97B !important;
+}
+
+.warning {
+  color: #FF8A00;
+  border: 1px solid #FF8A00;
+}
+
+.warning-span {
+  color: #FF8A00 !important;
+}
+
 .row {
   display: -ms-flexbox; /* IE10 */
   display: flex;
