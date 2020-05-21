@@ -6,5 +6,9 @@ const app = express()
 
 app.use('/', serveStatic(path.join(__dirname, '/dist')))
 
+app.use('/payment', serveStatic(path.join(__dirname, '/dist')))
+
+app.use('/finish', serveStatic(path.join(__dirname, '/dist')))
+
 const port = process.env.PORT || 8080
 app.listen(port)
