@@ -2,10 +2,11 @@
   <div class="container-title">
     <ul class="breadcrumb">
       <li>
-        <router-link to="/"><span class="circle">1 </span> Delivery</router-link>
+        <router-link to="/"><span class="circle"  :class="{ process: process >= 1 }">1 </span> Delivery</router-link>
+        <!-- <router-link to="/"><span class="circle">1 </span> Delivery</router-link> -->
       </li>
       <li>
-        <router-link to="/payment"><span class="circle">2 </span> Payment</router-link>
+        <router-link to="/payment"><span class="circle" :class="{ process: process >= 2 }">2 </span> Payment</router-link>
       </li>
       <li>
         <router-link to="/finish"><span class="circle">3 </span> Finish</router-link>
@@ -16,7 +17,27 @@
 
 <script>
 export default {
-  name: 'BreadcrumbNav'
+  name: 'BreadcrumbNav',
+  data () {
+    return {
+      dataPurchased: [],
+      process: 1
+    }
+  },
+  methods: {
+
+  },
+  mounted () {
+    if (localStorage.getItem('purchased')) {
+      try {
+        this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
+        this.process += this.dataPurchased[3].process
+        // console.log('APA ISINYA => ',this.dataPurchased)
+      } catch (e) {
+        localStorage.removeItem('purchased')
+      }
+    }
+  }
 }
 </script>
 
@@ -58,7 +79,6 @@ ul.breadcrumb li a {
 }
 
 span.circle {
-
   background: red;
   color: #ffffff;
   opacity: 0.3;
@@ -71,10 +91,15 @@ span.circle {
   line-height: 1.6em;
   margin-right: 8px;
   text-align: center;
-  width: 1.6em; 
+  width: 1.6em;
 }
 
 span.circle:hover {
+  opacity: 1;
+  background-color: #FF8A00;
+}
+
+span.process {
   opacity: 1;
   background-color: #FF8A00;
 }

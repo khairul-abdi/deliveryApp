@@ -13,6 +13,7 @@ body {
   font-size: 17px;
   padding: 8px;
   margin: 10px 50px ;
+  background-color: #FFFAE6;
 }
 
 * {

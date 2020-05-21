@@ -1,7 +1,8 @@
 <template>
   <div>
     <BreadcrumbNav/>
-    <form id="app" action="/payment" method="post">
+    <!-- <form id="app" action="/payment" method="get"> -->
+    <form id="app" action="" method="get">
       <div class="row box">
         <div class="col-75">
           <div class="container">
@@ -21,7 +22,7 @@
                     <span v-if="msg.phone == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
                     <span v-if="msg.phone == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
                   </div>
-                  <div class="input-group" :class="{success: msg.address == 1, warning: msg.address == 0}">
+                  <div class="input-group" :class="{'success-textarea': msg.address == 1, warning: msg.address == 0}">
                     <textarea rows="6" cols="50" maxlength="120"  @input="validateAddress" type="text" v-model="address" class="textarea" required></textarea>
                     <label for="address" class="textbox" :class="{'success-span': msg.address == 1, 'warning-span': msg.address == 0}">Delivery address</label>
                     <span v-if="msg.address == 1" class="InputAddOn-item address"><i class="fa fa-check"></i></span>
@@ -38,13 +39,13 @@
                   </div>
                   <div v-show="checked">
                     <div class="input-group" :class="{success: msg.dropshipName == 1, warning: msg.dropshipName == 0}">
-                      <input type="text" name="dropshipper-name" @input="validatedropshipName" v-model="dropshipName" required>
+                      <input type="text" name="dropshipper-name" @input="validatedropshipName" v-model="dropshipName">
                       <label for="dropshipper-name" class="input-dropshipper textbox" :class="{'success-span': msg.dropshipName == 1, 'warning-span': msg.dropshipName == 0}">Dropshipper Name</label>
                       <span v-if="msg.dropshipName == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
                       <span v-if="msg.dropshipName == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
                     </div>
                     <div class="input-group" :class="{success: msg.dropshipPhone == 1, warning: msg.dropshipPhone == 0}">
-                      <input type="text" name="dropshipper-phone"  @input="validatedropshipPhone" v-model="dropshipPhone" required>
+                      <input type="text" name="dropshipper-phone" @input="validatedropshipPhone" v-model="dropshipPhone">
                       <label for="dropshipper-phone" class="input-dropshipper textbox" :class="{'success-span': msg.dropshipPhone == 1, 'warning-span': msg.dropshipPhone == 0}">Dropshipper phone number</label>
                       <span v-if="msg.dropshipPhone == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
                       <span v-if="msg.dropshipPhone == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
@@ -62,7 +63,8 @@
             <p>Dropshipping Fee <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span></p>
             <hr>
             <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-            <input type="submit" value="Continue to Payment" class="btn">
+            <!-- <input type="submit" value="Continue to Payment" class="btn" @click="addPurchased"> -->
+            <input type="submit" value="Continue to Payment" class="btn" @click="addPurchased">
           </div>
         </div>
       </div>
@@ -94,7 +96,9 @@ export default {
       muchCharacter: 0,
       msg: [],
       success: 0,
-      warning: false
+      warning: false,
+      dataPurchased: [],
+      process: 0
     }
   },
   methods: {
@@ -121,14 +125,9 @@ export default {
       }
 
       if (validate(this.email)) {
-        // this.success++
-        // this.warning = false
         this.msg.email = 1
-        console.log(this.msg.email)
       } else {
-        // this.warning = true
         this.msg.email = 0
-        // this.msg.email = 'Invalid Email Address'
       }
     },
     validatePhone (value) {
@@ -162,9 +161,39 @@ export default {
       } else {
         this.msg.dropshipPhone = 0
       }
+    },
+    addPurchased () {
+      this.process++
+
+      if (!this.Cost) return
+      if (!this.total) return
+      if (!this.dropshippingFee) return
+
+      this.dataPurchased.push({ cost: this.Cost })
+      this.dataPurchased.push({ total: this.total })
+      this.dataPurchased.push({ process: this.process })
+
+      if (this.checked) {
+        this.dataPurchased.push({ dropshippingFee: this.dropshippingFee })
+      } else {
+        this.dataPurchased.push({ dropshippingFee: 0 })
+      }
+      console.log(this.dataPurchased)
+      this.savePurchased()
+    },
+    savePurchased () {
+      const parsed = JSON.stringify(this.dataPurchased)
+      localStorage.setItem('purchased', parsed)
     }
   },
-  watch: {
+  mounted () {
+    if (localStorage.getItem('purchased')) {
+      try {
+        this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
+      } catch (e) {
+        localStorage.removeItem('purchased')
+      }
+    }
   }
 }
 </script>
@@ -194,6 +223,15 @@ input:focus, textarea:focus, select:focus{
 .success {
   color: #1BD97B;
   border: 1px solid #1BD97B;
+  border-radius: 3px;
+}
+
+.success-textarea {
+  color: #1BD97B;
+  border: 1px solid #1BD97B;
+  border-radius: 3px;
+  height: 140px;
+  overflow: hidden;
 }
 
 .success-span {
@@ -203,6 +241,7 @@ input:focus, textarea:focus, select:focus{
 .warning{
   color: #FF8A00;
   border: 1px solid #FF8A00;
+  border-radius: 3px;
 }
 
 .warning-span {
@@ -379,6 +418,7 @@ textarea {
   font-family: Inter;
   border: 1px solid #ccc;
   font-size: 16px;
+  height: 140px;
   border-radius: 3px;
   padding-left: 13px;
   padding-top: 20px;

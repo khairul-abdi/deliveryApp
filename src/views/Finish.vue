@@ -4,50 +4,33 @@
     <div class="row box">
       <div class="col-75">
         <div class="container">
-          <a href="" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
-            <h1 class="delivery underline">Done</h1>
-            <div class="row wrap">
-              <!-- <div class="box-courier clicked">
-                <div class="title">
-                  <div class="box-name box-name-clicked">GO-SEND</div>
-                  <div  class="box-price box-price-clicked">15,000</div>
-                </div>
-                <div class="check">
-                  <i class="fas fa-check"></i>
-                </div>
-              </div> -->
-
-              <div
-                class="box-courier"
-                v-for="(shipment, index) in shipments"
-                :key=index
-                @click="shipmentSelect(index)"
-              >
-                <div class="title">
-                  <div class="box-name">{{ shipment.courier }}</div>
-                  <div class="box-price">{{ formatPrice(shipment.price) }}</div>
-                </div>
-
-                <!-- <div>
-                  <i class="fas fa-check"></i>
-                </div> -->
-              </div>
-            </div>
+          <div class="col-100" style="width: 100%; padding-left: 250px;">
+            <h1 class="delivery underline">Thank you</h1>
+              <p class="order-id">Order ID: {{generate()}}</p>
+              <p class="description">Your order will be delivered today with GO-SEND</p>
+              <a href="/payment" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
+          </div>
         </div>
       </div>
       <div class="col-25">
         <div class="container">
           <h3 class="summary-title">Summary</h3>
           <p class="items-purchased">10 items purchased</p>
+
           <hr class="line">
           <p class="dev-estimation">Delivery estimation</p>
           <p class="courier-send">today by GO-SEND</p>
+
+          <hr class="line">
+          <p class="dev-estimation">Payment method</p>
+          <p class="courier-send">Bank Transfer</p>
+          <!-- <p class="courier-send" v-if="courier">{{ deliveryTime }} by {{ courier }}</p> -->
+
           <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
           <p class="dropshipping">Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
           <p class="shipment-price"><span style="font-weight: bold;">GO-SEND</span> shipment <span class="price">{{ formatPrice(priceCourier) }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-          <input type="submit" value="Continue to Payment" class="btn">
         </div>
       </div>
     </div>
@@ -71,22 +54,7 @@ export default {
       total: 0,
       priceCourier: 0,
       email: '',
-      msg: [],
-      shipments: [{
-        courier: 'GO-SEND',
-        price: 15000,
-        deliveryEstimate: 'today'
-      },
-      {
-        courier: 'JNE',
-        price: 9000,
-        deliveryEstimate: '2 days'
-      },
-      {
-        courier: 'Personal Courier',
-        price: 29000,
-        deliveryEstimate: '1 day'
-      }]
+      msg: []
     }
   },
   methods: {
@@ -103,28 +71,49 @@ export default {
 
       return this.formatPrice(this.total)
     },
-    validateEmail (value) {
-      // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-      //   this.msg.email = ''
-      // } else {
-      //   this.msg.email = 'Invalid Email Address'
-      // }
-    },
-    shipmentSelect (index) {
-      console.log(index)
-      this.priceCourier = this.shipments[index].price
+    generate () {
+      const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      let result = ''
+      for (var i = 5; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))]
+      return result
     }
   },
-  watch: {
-    email (value) {
-      this.email = value
-      this.validateEmail(value)
+  mounted () {
+    if (localStorage.getItem('purchased')) {
+      try {
+        this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
+        this.cost = this.dataPurchased[0].cost
+        this.total = this.dataPurchased[1].total
+
+        if (this.dataPurchased[3].dropshippingFee !== 0) {
+          this.dropshippingFee = this.dataPurchased[3].dropshippingFee
+        }
+
+        console.log('COST', this.cost)
+        console.log('TOTAL', this.total)
+        console.log('Dropshiping Fee', this.dropshippingFee)
+      } catch (e) {
+        localStorage.removeItem('purchased')
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.description {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.description {
+  font-size: 14px;
+  margin-bottom: 50px;
+}
+
+.order-id {
+  font-size: 14px;
+}
+
 .row {
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -192,6 +181,7 @@ color: black;
   font-size: 36px;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
+  margin-top: 100px;
 }
 
 .underline {
@@ -217,6 +207,7 @@ color: black;
 .link-to-cart {
   color: black;
   text-decoration: none;
+  font-size: 14px;
 }
 
 p.back {
@@ -260,22 +251,24 @@ p.back {
   width: 80px;
   border: 1px solid #D8D8D8;
   margin-left: 0;
-  margin-top: 20px;
+  margin-top: 15px;
+  margin-bottom: 20px;
 }
 
 .dev-estimation {
   font-size: 14px;
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .courier-send {
   font-weight: 500;
   font-size: 16px;
   color: #1BD97B;
+  margin-top: -3px;
 }
 
 .cost {
-  margin-top: 92px;
+  margin-top: 65px;
   opacity: 0.6;
   font-size: 14px;
 }

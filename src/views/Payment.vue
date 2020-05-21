@@ -4,34 +4,55 @@
     <div class="row box">
       <div class="col-75">
         <div class="container">
-          <a href="" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
-            <h1 class="delivery underline">Shipment</h1>
-            <div class="row wrap">
-              <!-- <div class="box-courier clicked">
-                <div class="title">
-                  <div class="box-name box-name-clicked">GO-SEND</div>
-                  <div  class="box-price box-price-clicked">15,000</div>
-                </div>
-                <div class="check">
-                  <i class="fas fa-check"></i>
-                </div>
-              </div> -->
-
-              <div
-                class="box-courier"
-                v-for="(shipment, index) in shipments"
-                :key=index
-                @click="shipmentSelect(index)"
-              >
-                <div class="title">
-                  <div class="box-name">{{ shipment.courier }}</div>
-                  <div class="box-price">{{ formatPrice(shipment.price) }}</div>
-                </div>
-                <div class="check" v-show="show">
-                  <i class="fas fa-check"></i>
-                </div>
+          <a href="/" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
+          <h1 class="delivery underline">Shipment</h1>
+          <div class="row wrap">
+            <div
+              class="box-courier"
+              v-for="(shipment, index) in shipments"
+              :key=index
+              @click="shipmentSelect(index)"
+              :class="{success: index == indexSuccess}"
+            >
+              <div class="title">
+                <div class="box-name">{{ shipment.courier }}</div>
+                <div class="box-price">{{ formatPrice(shipment.price) }}</div>
+              </div>
+              <div class="check" v-if="index == indexSuccess">
+                <i class="fas fa-check"></i>
               </div>
             </div>
+          </div>
+
+          <h1 class="payment underline">Payment</h1>
+          <div class="row wrap">
+            <div class="box-courier" @click="payment('e-Wallet')" :class="{success: payments == 'e-Wallet'}">
+              <div class="title">
+                <div class="box-name">e-Wallet</div>
+                <div class="box-price">1,500,000 left</div>
+              </div>
+              <div class="check" v-if="payments == 'e-Wallet'">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+            <div class="box-courier" @click="payment('Bank Transfer')" :class="{success: payments == 'Bank Transfer'}">
+              <div class="title">
+                <div class="box-name account">Bank Transfer</div>
+              </div>
+              <div class="check" v-if="payments == 'Bank Transfer'">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+            <div class="box-courier" @click="payment('Virtual Account')" :class="{success: payments == 'Virtual Account'}">
+              <div class="title">
+                <div class="box-name account">Virtual Account</div>
+              </div>
+              <div class="check" v-if="payments == 'Virtual Account'">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
       <div class="col-25">
@@ -39,14 +60,16 @@
           <h3 class="summary-title">Summary</h3>
           <p class="items-purchased">10 items purchased</p>
           <hr class="line">
+
           <p class="dev-estimation">Delivery estimation</p>
-          <p class="courier-send">today by GO-SEND</p>
-          <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
-          <p class="dropshipping">Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
+          <p class="courier-send" v-if="courier">{{ deliveryTime }} by {{ courier }}</p>
+          <p class="cost">Cost of goods <span class="price">{{ cost ? formatPrice(cost) : 0 }}</span></p>
+          <p class="dropshipping">Dropshipping Fee <span class="price">{{ dropshippingFee ? formatPrice(dropshippingFee) : 0 }}</span></p>
           <p class="shipment-price" v-if="price"><span style="font-weight: bold;">{{ courier }}</span> shipment <span class="price">{{ price ? formatPrice(price) : 0 }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-          <input type="submit" value="Continue to Payment" class="btn">
+          <router-link to="/finish" type="submit" tag="button" v-if="payments" class="btn" @click="addPurchased">Payment with {{payments}}</router-link>
+          <router-link to="/finish" type="submit" tag="button" v-else class="btn">Payment with ....</router-link>
         </div>
       </div>
     </div>
@@ -64,15 +87,18 @@ export default {
   },
   data () {
     return {
-      checked: false,
-      dropshippingFee: 5900,
-      Cost: 500000,
+      dropshippingFee: 0,
+      cost: 0,
       total: 0,
+      allTotal: 0,
       courier: '',
       price: 0,
+      payments: '',
+      deliveryTime: 0,
       email: '',
+      dataPurchased: [],
       msg: [],
-      show: false,
+      indexSuccess: null,
       shipments: [{
         courier: 'GO-SEND',
         price: 15000,
@@ -97,38 +123,87 @@ export default {
     },
     totalCost () {
       if (this.price) {
-        this.total = this.Cost + this.dropshippingFee + this.price
+        this.allTotal = this.total + this.price
       } else {
-        this.total = this.Cost
+        this.allTotal = this.total
       }
 
-      return this.formatPrice(this.total)
-    },
-    validateEmail (value) {
-      // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
-      //   this.msg.email = ''
-      // } else {
-      //   this.msg.email = 'Invalid Email Address'
-      // }
+      return this.formatPrice(this.allTotal)
     },
     shipmentSelect (index) {
-      // console.log(index)
       this.price = this.shipments[index].price
       this.courier = this.shipments[index].courier
-      this.show = !this.show
-      this.totalCost()
+      this.deliveryTime = this.shipments[index].deliveryEstimate
+      this.indexSuccess = index
+      this.totalCost(index)
+    },
+    payment (payment) {
+      this.payments = payment
+    },
+    addPurchased () {
+      this.process++
+
+      // if (!this.Cost) return
+      // if (!this.total) return
+      // if (!this.dropshippingFee) return
+      // if (!this.allTotal) return
+      // if (!this.courier) return
+      // if (!this.price) return
+      // if (!this.deliveryTime) return
+      // if (!this.payments) return
+
+      this.dataPurchased.push({ cost: this.Cost })
+      this.dataPurchased.push({ total: this.total })
+      this.dataPurchased.push({ process: this.process })
+      this.dataPurchased.push({ allTotal: this.allTotal })
+      this.dataPurchased.push({ price: this.price })
+      this.dataPurchased.push({ courier: this.courier })
+      this.dataPurchased.push({ deliveryTime: this.deliveryTime })
+      this.dataPurchased.push({ payments: this.payments })
+
+      if (this.checked) {
+        this.dataPurchased.push({ dropshippingFee: this.dropshippingFee })
+      } else {
+        this.dataPurchased.push({ dropshippingFee: 0 })
+      }
+      console.log(this.dataPurchased)
+      this.savePurchased()
+    },
+    savePurchased () {
+      const parsed = JSON.stringify(this.dataPurchased)
+      localStorage.setItem('purchased', parsed)
     }
   },
-  watch: {
-    email (value) {
-      this.email = value
-      this.validateEmail(value)
+  mounted () {
+    if (localStorage.getItem('purchased')) {
+      try {
+        this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
+        this.cost = this.dataPurchased[0].cost
+        this.total = this.dataPurchased[1].total
+
+        if (this.dataPurchased[3].dropshippingFee !== 0) {
+          this.dropshippingFee = this.dataPurchased[3].dropshippingFee
+        }
+
+        console.log('COST', this.cost)
+        console.log('TOTAL', this.total)
+        console.log('Dropshiping Fee', this.dropshippingFee)
+      } catch (e) {
+        localStorage.removeItem('purchased')
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.box-courier:focus {
+  color: #1BD97B;
+  background-color: rgba(27, 217, 123, 0.1);
+  border: 1px solid #1BD97B;
+  border-radius: 3px;
+}
+
 .row {
   display: -ms-flexbox; /* IE10 */
   display: flex;
@@ -142,6 +217,7 @@ export default {
 .wrap {
   flex-wrap: wrap;
   padding: 0 10px;
+  margin-bottom: 10px;
 }
 
 .box-courier {
@@ -154,6 +230,24 @@ export default {
   font-weight: 500;
   display: flex;
   cursor: pointer;
+}
+
+.success {
+  background-color: rgba(27, 217, 123, 0.1);
+  border: 1px solid #1BD97B;
+  border-radius: 3px;
+
+  .box-name {
+    color: black;
+  }
+
+  .box-price {
+    color: black;
+  }
+
+  p {
+    color: black;
+  }
 }
 
 .title {
@@ -172,24 +266,15 @@ export default {
   padding-bottom: 2px;
 }
 
+.account {
+  font-size: 16px;
+  padding-top: 18px;
+}
+
 .box-price {
   font-weight: bold;
   color: rgba(45, 42, 64, 0.6);
   font-size: 16px;
-}
-
-// Success Click
-.clicked {
-  border: 2px solid #1BD97B;
-  background-color: rgba(27, 217, 123, 0.1);;
-}
-
-.box-price-clicked {
-color: black;
-}
-
-.box-name-clicked {
-color: black;
 }
 
 .delivery {
