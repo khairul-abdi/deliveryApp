@@ -4,7 +4,7 @@
     <div class="row box">
       <div class="col-75">
         <div class="container">
-          <a href="/" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
+          <a href="/" class="link-to-cart" @click="backToDelivery()"><p class="back">&#8592; Back to delivery</p></a>
           <h1 class="delivery underline">Shipment</h1>
           <div class="row wrap">
             <div
@@ -69,7 +69,7 @@
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
           <button to="/finish" type="submit" tag="button" v-if="payments" class="btn" @click="addPurchased">Payment with {{payments}}</button>
-          <router-link to="" type="submit" tag="button" v-else class="btn">Payment with ....</router-link>
+          <button to="" type="submit" tag="button" v-else class="btn">Payment with ....</button>
         </div>
       </div>
     </div>
@@ -155,6 +155,9 @@ export default {
     savePurchased () {
       const parsed = JSON.stringify(this.dataPurchased)
       localStorage.setItem('purchased', parsed)
+    },
+    backToDelivery () {
+      localStorage.removeItem('purchased')
     }
   },
   mounted () {

@@ -8,7 +8,7 @@
             <h1 class="delivery underline">Thank you</h1>
               <p class="order-id">Order ID: {{generate()}}</p>
               <p class="description">Your order will be delivered {{deliveryTime}} with {{courier}}</p>
-              <a href="/" class="link-to-cart" @click="reset()"><p class="back">&#8592; Back to delivery</p></a>
+              <a href="/" class="link-to-cart" @click="reset()"><p class="back">&#8592; Go to homepage</p></a>
           </div>
         </div>
       </div>
