@@ -87,7 +87,6 @@ export default {
   },
   data () {
     return {
-      process: 0,
       dropshippingFee: 0,
       cost: 0,
       total: 0,
@@ -164,7 +163,6 @@ export default {
         this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
         this.cost = this.dataPurchased[1].cost
         this.total = this.dataPurchased[2].total
-        this.process = this.dataPurchased[3].process++
         this.dropshippingFee = this.dataPurchased[0].dropshippingFee
       } catch (e) {
         localStorage.removeItem('purchased')

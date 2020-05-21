@@ -8,7 +8,7 @@
             <h1 class="delivery underline">Thank you</h1>
               <p class="order-id">Order ID: {{generate()}}</p>
               <p class="description">Your order will be delivered {{deliveryTime}} with {{courier}}</p>
-              <a href="/" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
+              <a href="/" class="link-to-cart" @click="reset()"><p class="back">&#8592; Back to delivery</p></a>
           </div>
         </div>
       </div>
@@ -65,6 +65,9 @@ export default {
       let result = ''
       for (var i = 5; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))]
       return result
+    },
+    reset () {
+      localStorage.removeItem('purchased')
     }
   },
   mounted () {
@@ -78,14 +81,10 @@ export default {
         this.cost = this.dataPurchased[1].cost
         this.allTotal = this.dataPurchased[4].allTotal
         this.dropshippingFee = this.dataPurchased[0].dropshippingFee
-
-        console.log('COST FINSIH', this.cost)
-        console.log('TOTAL FINSIH', this.total)
-        console.log('Dropshiping Fee FINSIH', this.dropshippingFee)
+        // this.dataPurchased[3].process = 1
       } catch (e) {
-        // localStorage.removeItem('purchased')
-        console.log('ERROR FINSIH')
         console.log(e)
+        localStorage.removeItem('purchased')
       }
     }
   }
