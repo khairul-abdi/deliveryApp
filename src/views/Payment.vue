@@ -29,7 +29,7 @@
             <div class="box-courier" @click="payment('e-Wallet')" :class="{success: payments == 'e-Wallet'}">
               <div class="title">
                 <div class="box-name">e-Wallet</div>
-                <div class="box-price">1,500,000 left</div>
+                <div class="box-price">1.500.000 left</div>
               </div>
               <div class="check" v-if="payments == 'e-Wallet'">
                 <i class="fas fa-check"></i>
@@ -68,8 +68,8 @@
           <p class="shipment-price" v-if="price"><span style="font-weight: bold;">{{ courier }}</span> shipment <span class="price">{{ price ? formatPrice(price) : 0 }}</span></p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-          <router-link to="/finish" type="submit" tag="button" v-if="payments" class="btn" @click="addPurchased">Payment with {{payments}}</router-link>
-          <router-link to="/finish" type="submit" tag="button" v-else class="btn">Payment with ....</router-link>
+          <button to="/finish" type="submit" tag="button" v-if="payments" class="btn" @click="addPurchased">Payment with {{payments}}</button>
+          <router-link to="" type="submit" tag="button" v-else class="btn">Payment with ....</router-link>
         </div>
       </div>
     </div>
@@ -87,6 +87,7 @@ export default {
   },
   data () {
     return {
+      process: 0,
       dropshippingFee: 0,
       cost: 0,
       total: 0,
@@ -128,6 +129,7 @@ export default {
         this.allTotal = this.total
       }
 
+      console.log('ALL TOTAL', this.allTotal)
       return this.formatPrice(this.allTotal)
     },
     shipmentSelect (index) {
@@ -141,33 +143,15 @@ export default {
       this.payments = payment
     },
     addPurchased () {
-      this.process++
-
-      // if (!this.Cost) return
-      // if (!this.total) return
-      // if (!this.dropshippingFee) return
-      // if (!this.allTotal) return
-      // if (!this.courier) return
-      // if (!this.price) return
-      // if (!this.deliveryTime) return
-      // if (!this.payments) return
-
-      this.dataPurchased.push({ cost: this.Cost })
-      this.dataPurchased.push({ total: this.total })
-      this.dataPurchased.push({ process: this.process })
+      this.dataPurchased[3].process++
       this.dataPurchased.push({ allTotal: this.allTotal })
       this.dataPurchased.push({ price: this.price })
       this.dataPurchased.push({ courier: this.courier })
       this.dataPurchased.push({ deliveryTime: this.deliveryTime })
       this.dataPurchased.push({ payments: this.payments })
 
-      if (this.checked) {
-        this.dataPurchased.push({ dropshippingFee: this.dropshippingFee })
-      } else {
-        this.dataPurchased.push({ dropshippingFee: 0 })
-      }
-      console.log(this.dataPurchased)
       this.savePurchased()
+      this.$router.push('/finish')
     },
     savePurchased () {
       const parsed = JSON.stringify(this.dataPurchased)
@@ -178,16 +162,10 @@ export default {
     if (localStorage.getItem('purchased')) {
       try {
         this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
-        this.cost = this.dataPurchased[0].cost
-        this.total = this.dataPurchased[1].total
-
-        if (this.dataPurchased[3].dropshippingFee !== 0) {
-          this.dropshippingFee = this.dataPurchased[3].dropshippingFee
-        }
-
-        console.log('COST', this.cost)
-        console.log('TOTAL', this.total)
-        console.log('Dropshiping Fee', this.dropshippingFee)
+        this.cost = this.dataPurchased[1].cost
+        this.total = this.dataPurchased[2].total
+        this.process = this.dataPurchased[3].process++
+        this.dropshippingFee = this.dataPurchased[0].dropshippingFee
       } catch (e) {
         localStorage.removeItem('purchased')
       }

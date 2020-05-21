@@ -7,8 +7,8 @@
           <div class="col-100" style="width: 100%; padding-left: 250px;">
             <h1 class="delivery underline">Thank you</h1>
               <p class="order-id">Order ID: {{generate()}}</p>
-              <p class="description">Your order will be delivered today with GO-SEND</p>
-              <a href="/payment" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
+              <p class="description">Your order will be delivered {{deliveryTime}} with {{courier}}</p>
+              <a href="/" class="link-to-cart"><p class="back">&#8592; Back to delivery</p></a>
           </div>
         </div>
       </div>
@@ -19,18 +19,16 @@
 
           <hr class="line">
           <p class="dev-estimation">Delivery estimation</p>
-          <p class="courier-send">today by GO-SEND</p>
+          <p class="courier-send">{{deliveryTime}} by {{courier}}</p>
 
           <hr class="line">
           <p class="dev-estimation">Payment method</p>
-          <p class="courier-send">Bank Transfer</p>
-          <!-- <p class="courier-send" v-if="courier">{{ deliveryTime }} by {{ courier }}</p> -->
-
-          <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
-          <p class="dropshipping">Dropshipping Fee <span class="price">{{ checked ? dropshippingFee : 0 }}</span></p>
-          <p class="shipment-price"><span style="font-weight: bold;">GO-SEND</span> shipment <span class="price">{{ formatPrice(priceCourier) }}</span></p>
+          <p class="courier-send">{{payments}}</p>
+          <p class="cost">Cost of goods <span class="price">{{ formatPrice(cost) }}</span></p>
+          <p class="dropshipping">Dropshipping Fee <span class="price">{{ formatPrice(dropshippingFee) }}</span></p>
+          <p class="shipment-price"><span style="font-weight: bold;">{{courier}}</span> shipment <span class="price">{{ formatPrice(price) }}</span></p>
           <hr>
-          <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
+          <h3>Total <span class="price" style="color: #FF8A00;">{{ formatPrice(allTotal) }}</span></h3>
         </div>
       </div>
     </div>
@@ -48,13 +46,13 @@ export default {
   },
   data () {
     return {
-      checked: false,
-      dropshippingFee: 5900,
-      Cost: 500000,
-      total: 0,
-      priceCourier: 0,
-      email: '',
-      msg: []
+      dropshippingFee: 0,
+      cost: 0,
+      courier: 0,
+      allTotal: 0,
+      price: 0,
+      payments: '',
+      deliveryTime: ''
     }
   },
   methods: {
@@ -62,17 +60,8 @@ export default {
       const val = (value / 1).toFixed(2).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
-    totalCost () {
-      if (this.checked) {
-        this.total = this.Cost + this.dropshippingFee + this.priceCourier
-      } else {
-        this.total = this.Cost
-      }
-
-      return this.formatPrice(this.total)
-    },
     generate () {
-      const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      const chars = '23456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKMNPQRSTUVWXYZ'
       let result = ''
       for (var i = 5; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))]
       return result
@@ -82,18 +71,21 @@ export default {
     if (localStorage.getItem('purchased')) {
       try {
         this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
-        this.cost = this.dataPurchased[0].cost
-        this.total = this.dataPurchased[1].total
+        this.courier = this.dataPurchased[6].courier
+        this.deliveryTime = this.dataPurchased[7].deliveryTime
+        this.payments = this.dataPurchased[8].payments
+        this.price = this.dataPurchased[5].price
+        this.cost = this.dataPurchased[1].cost
+        this.allTotal = this.dataPurchased[4].allTotal
+        this.dropshippingFee = this.dataPurchased[0].dropshippingFee
 
-        if (this.dataPurchased[3].dropshippingFee !== 0) {
-          this.dropshippingFee = this.dataPurchased[3].dropshippingFee
-        }
-
-        console.log('COST', this.cost)
-        console.log('TOTAL', this.total)
-        console.log('Dropshiping Fee', this.dropshippingFee)
+        console.log('COST FINSIH', this.cost)
+        console.log('TOTAL FINSIH', this.total)
+        console.log('Dropshiping Fee FINSIH', this.dropshippingFee)
       } catch (e) {
-        localStorage.removeItem('purchased')
+        // localStorage.removeItem('purchased')
+        console.log('ERROR FINSIH')
+        console.log(e)
       }
     }
   }

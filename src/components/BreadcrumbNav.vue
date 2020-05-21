@@ -3,13 +3,12 @@
     <ul class="breadcrumb">
       <li>
         <router-link to="/"><span class="circle"  :class="{ process: process >= 1 }">1 </span> Delivery</router-link>
-        <!-- <router-link to="/"><span class="circle">1 </span> Delivery</router-link> -->
       </li>
       <li>
         <router-link to="/payment"><span class="circle" :class="{ process: process >= 2 }">2 </span> Payment</router-link>
       </li>
       <li>
-        <router-link to="/finish"><span class="circle">3 </span> Finish</router-link>
+        <router-link to="/finish"><span class="circle" :class="{ process: process >= 3 }">3 </span> Finish</router-link>
       </li>
     </ul>
   </div>
@@ -31,8 +30,7 @@ export default {
     if (localStorage.getItem('purchased')) {
       try {
         this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
-        this.process += this.dataPurchased[3].process
-        // console.log('APA ISINYA => ',this.dataPurchased)
+        this.process = this.dataPurchased[3].process
       } catch (e) {
         localStorage.removeItem('purchased')
       }

@@ -1,8 +1,7 @@
 <template>
   <div>
     <BreadcrumbNav/>
-    <!-- <form id="app" action="/payment" method="get"> -->
-    <form id="app" action="" method="get">
+    <form id="app" action="/payment" method="get">
       <div class="row box">
         <div class="col-75">
           <div class="container">
@@ -63,7 +62,6 @@
             <p>Dropshipping Fee <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span></p>
             <hr>
             <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-            <!-- <input type="submit" value="Continue to Payment" class="btn" @click="addPurchased"> -->
             <input type="submit" value="Continue to Payment" class="btn" @click="addPurchased">
           </div>
         </div>
@@ -97,8 +95,7 @@ export default {
       msg: [],
       success: 0,
       warning: false,
-      dataPurchased: [],
-      process: 0
+      dataPurchased: []
     }
   },
   methods: {
@@ -163,22 +160,19 @@ export default {
       }
     },
     addPurchased () {
-      this.process++
-
       if (!this.Cost) return
       if (!this.total) return
       if (!this.dropshippingFee) return
-
-      this.dataPurchased.push({ cost: this.Cost })
-      this.dataPurchased.push({ total: this.total })
-      this.dataPurchased.push({ process: this.process })
 
       if (this.checked) {
         this.dataPurchased.push({ dropshippingFee: this.dropshippingFee })
       } else {
         this.dataPurchased.push({ dropshippingFee: 0 })
       }
-      console.log(this.dataPurchased)
+      this.dataPurchased.push({ cost: this.Cost })
+      this.dataPurchased.push({ total: this.total })
+      this.dataPurchased.push({ process: 2 })
+
       this.savePurchased()
     },
     savePurchased () {
@@ -187,13 +181,24 @@ export default {
     }
   },
   mounted () {
-    if (localStorage.getItem('purchased')) {
-      try {
-        this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
-      } catch (e) {
-        localStorage.removeItem('purchased')
-      }
-    }
+    // if (localStorage.getItem('purchased')) {
+    //   try {
+    //     this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
+    //     this.cost = this.dataPurchased[1].cost
+    //     this.total = this.dataPurchased[2].total
+    //     this.process = this.dataPurchased[3].process
+
+    //     if (this.dataPurchased[0].dropshippingFee !== 0) {
+    //       this.dropshippingFee = this.dataPurchased[0].dropshippingFee
+    //     }
+
+    //     console.log('COST', this.cost)
+    //     console.log('TOTAL', this.total)
+    //     console.log('Dropshiping Fee', this.dropshippingFee)
+    //   } catch (e) {
+    //     localStorage.removeItem('purchased')
+    //   }
+    // }
   }
 }
 </script>
