@@ -7,8 +7,12 @@
           <div class="col-100" style="width: 100%; padding-left: 250px;">
             <h1 class="delivery underline">Thank you</h1>
               <p class="order-id">Order ID: {{generate()}}</p>
-              <p class="description">Your order will be delivered {{deliveryTime}} with {{courier}}</p>
-              <a href="/" class="link-to-cart" @click="reset()"><p class="back">&#8592; Go to homepage</p></a>
+              <p class="description">
+                Your order will be delivered <b>{{deliveryTime}}</b> with <b>{{courier}}</b>
+              </p>
+              <a href="/" class="link-to-cart" @click="reset()">
+                <p class="back">&#8592; Go to homepage</p>
+              </a>
           </div>
         </div>
       </div>
@@ -24,11 +28,22 @@
           <hr class="line">
           <p class="dev-estimation">Payment method</p>
           <p class="courier-send">{{payments}}</p>
-          <p class="cost">Cost of goods <span class="price">{{ formatPrice(cost) }}</span></p>
-          <p class="dropshipping">Dropshipping Fee <span class="price">{{ formatPrice(dropshippingFee) }}</span></p>
-          <p class="shipment-price"><span style="font-weight: bold;">{{courier}}</span> shipment <span class="price">{{ formatPrice(price) }}</span></p>
+          <p class="cost">Cost of goods
+            <span class="price">{{ formatPrice(cost) }}</span>
+          </p>
+          <p class="dropshipping">Dropshipping Fee
+            <span class="price">{{ dropshippingFee ? formatPrice(dropshippingFee) : 0 }}</span>
+          </p>
+          <p class="shipment-price">
+            <span style="font-weight: bold;">{{courier}}</span> shipment
+            <span class="price">{{ formatPrice(price) }}</span>
+          </p>
           <hr>
-          <h3>Total <span class="price" style="color: #FF8A00;">{{ formatPrice(allTotal) }}</span></h3>
+          <h3>Total
+            <span class="price" style="color: #FF8A00;">
+              {{ formatPrice(allTotal) }}
+            </span>
+          </h3>
         </div>
       </div>
     </div>
@@ -38,6 +53,7 @@
 <script>
 // @ is an alias to /src
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
+import { formatPrice } from '@/helper.js'
 
 export default {
   name: 'Delivery',
@@ -56,10 +72,7 @@ export default {
     }
   },
   methods: {
-    formatPrice (value) {
-      const val = (value / 1).toFixed(2).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-    },
+    formatPrice,
     generate () {
       const chars = '23456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKMNPQRSTUVWXYZ'
       let result = ''

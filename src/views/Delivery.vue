@@ -10,21 +10,69 @@
                   <a href="" class="link-to-cart"><p class="back">&#8592; Back to cart</p></a>
                   <h1 class="delivery underline">Delivery details</h1>
                   <div class="input-group" :class="{success: msg.email == 1, warning: msg.email == 0}">
-                    <input type="text" @input="validateEmail" v-model="email" name="email" required>
-                    <label for="email" class="textbox" :class="{'success-span': msg.email == 1, 'warning-span': msg.email == 0}">Email</label>
-                    <span v-if="msg.email == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
-                    <span v-if="msg.email == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
+                    <input
+                      type="text"
+                      @input="validateEmail"
+                      v-model="email"
+                      name="email"
+                      required
+                    >
+                    <label
+                      for="email"
+                      class="textbox"
+                      :class="{'success-span': msg.email == 1, 'warning-span': msg.email == 0}"
+                    >
+                      Email
+                    </label>
+                    <span v-if="msg.email == 0" class="InputAddOn-item">
+                      <i class="fa fa-times"></i>
+                    </span>
+                    <span v-if="msg.email == 1" class="InputAddOn-item">
+                      <i class="fa fa-check"></i>
+                    </span>
                   </div>
                   <div class="input-group" :class="{success: msg.phone == 1, warning: msg.phone == 0}">
-                    <input type="text" @input="validatePhone" v-model="phone" required>
-                    <label for="phone" class="textbox" :class="{'success-span': msg.phone == 1, 'warning-span': msg.phone == 0}">Phone Number</label>
-                    <span v-if="msg.phone == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
-                    <span v-if="msg.phone == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
+                    <input
+                      type="text"
+                      @input="validatePhone"
+                      v-model="phone"
+                      required
+                    >
+                    <label
+                      for="phone"
+                      class="textbox"
+                      :class="{'success-span': msg.phone == 1, 'warning-span': msg.phone == 0}"
+                    >
+                      Phone Number
+                    </label>
+                    <span v-if="msg.phone == 0" class="InputAddOn-item">
+                      <i class="fa fa-times"></i>
+                    </span>
+                    <span v-if="msg.phone == 1" class="InputAddOn-item">
+                      <i class="fa fa-check"></i>
+                    </span>
                   </div>
                   <div class="input-group" :class="{'success-textarea': msg.address == 1, warning: msg.address == 0}">
-                    <textarea rows="6" cols="50" maxlength="120"  @input="validateAddress" type="text" v-model="address" class="textarea" required></textarea>
-                    <label for="address" class="textbox" :class="{'success-span': msg.address == 1, 'warning-span': msg.address == 0}">Delivery address</label>
-                    <span v-if="msg.address == 1" class="InputAddOn-item address"><i class="fa fa-check"></i></span>
+                    <textarea
+                      rows="6"
+                      cols="50"
+                      maxlength="120"
+                      @input="validateAddress"
+                      type="text"
+                      v-model="address"
+                      class="textarea"
+                      required
+                    ></textarea>
+                    <label
+                      for="address"
+                      class="textbox"
+                      :class="{'success-span': msg.address == 1, 'warning-span': msg.address == 0}"
+                    >
+                      Delivery address
+                    </label>
+                    <span v-if="msg.address == 1" class="InputAddOn-item address">
+                      <i class="fa fa-check"></i>
+                    </span>
                     <span class="words" v-if="address.length">{{120 - address.length}}</span>
                   </div>
                 </div>
@@ -38,16 +86,50 @@
                   </div>
                   <div v-show="checked">
                     <div class="input-group" :class="{success: msg.dropshipName == 1, warning: msg.dropshipName == 0}">
-                      <input type="text" name="dropshipper-name" @input="validatedropshipName" v-model="dropshipName">
-                      <label for="dropshipper-name" class="input-dropshipper textbox" :class="{'success-span': msg.dropshipName == 1, 'warning-span': msg.dropshipName == 0}">Dropshipper Name</label>
-                      <span v-if="msg.dropshipName == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
-                      <span v-if="msg.dropshipName == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
+                      <input
+                        type="text"
+                        name="dropshipper-name"
+                        v-if="checked"
+                        @input="validatedropshipName"
+                        v-model="dropshipName"
+                        required
+                      >
+                      <label
+                        for="dropshipper-name"
+                        class="textbox"
+                        :class="{'success-span': msg.dropshipName == 1, 'warning-span': msg.dropshipName == 0}"
+                      >
+                        Dropshipper Name
+                      </label>
+                      <span v-if="msg.dropshipName == 0" class="InputAddOn-item">
+                        <i class="fa fa-times"></i>
+                      </span>
+                      <span v-if="msg.dropshipName == 1" class="InputAddOn-item">
+                        <i class="fa fa-check"></i>
+                      </span>
                     </div>
                     <div class="input-group" :class="{success: msg.dropshipPhone == 1, warning: msg.dropshipPhone == 0}">
-                      <input type="text" name="dropshipper-phone" @input="validatedropshipPhone" v-model="dropshipPhone">
-                      <label for="dropshipper-phone" class="input-dropshipper textbox" :class="{'success-span': msg.dropshipPhone == 1, 'warning-span': msg.dropshipPhone == 0}">Dropshipper phone number</label>
-                      <span v-if="msg.dropshipPhone == 0" class="InputAddOn-item"><i class="fa fa-times"></i></span>
-                      <span v-if="msg.dropshipPhone == 1" class="InputAddOn-item"><i class="fa fa-check"></i></span>
+                      <input
+                        type="text"
+                        name="dropshipper-phone"
+                        v-if="checked"
+                        @input="validatedropshipPhone"
+                        v-model="dropshipPhone"
+                        required
+                      >
+                      <label
+                        for="dropshipper-phone"
+                        class="textbox"
+                        :class="{'success-span': msg.dropshipPhone == 1, 'warning-span': msg.dropshipPhone == 0}"
+                      >
+                        Dropshipper phone number
+                      </label>
+                      <span v-if="msg.dropshipPhone == 0" class="InputAddOn-item">
+                        <i class="fa fa-times"></i>
+                      </span>
+                      <span v-if="msg.dropshipPhone == 1" class="InputAddOn-item">
+                        <i class="fa fa-check"></i>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -57,9 +139,12 @@
         <div class="col-25">
           <div class="container">
             <h3 class="summary-title">Summary</h3>
-            <p>10 items purchased</p>
+            <p class="items-purchased">10 items purchased</p>
             <p class="cost">Cost of goods <span class="price">{{ formatPrice(Cost) }}</span></p>
-            <p>Dropshipping Fee <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span></p>
+            <p class="dropshipping">
+              Dropshipping Fee
+              <span class="price">{{ checked ? formatPrice(dropshippingFee) : 0 }}</span>
+            </p>
             <hr>
             <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
             <input type="submit" value="Continue to Payment" class="btn" @click="addPurchased">
@@ -72,8 +157,8 @@
 
 <script>
 // @ is an alias to /src
-
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
+import { formatPrice } from '@/helper.js'
 
 export default {
   name: 'Delivery',
@@ -93,16 +178,11 @@ export default {
       dropshipName: '',
       muchCharacter: 0,
       msg: [],
-      success: 0,
-      warning: false,
       dataPurchased: []
     }
   },
   methods: {
-    formatPrice (value) {
-      const val = (value / 1).toFixed(2).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-    },
+    formatPrice,
     totalCost () {
       if (this.checked) {
         this.total = this.Cost + this.dropshippingFee
@@ -179,26 +259,6 @@ export default {
       const parsed = JSON.stringify(this.dataPurchased)
       localStorage.setItem('purchased', parsed)
     }
-  },
-  mounted () {
-    // if (localStorage.getItem('purchased')) {
-    //   try {
-    //     this.dataPurchased = JSON.parse(localStorage.getItem('purchased'))
-    //     this.cost = this.dataPurchased[1].cost
-    //     this.total = this.dataPurchased[2].total
-    //     this.process = this.dataPurchased[3].process
-
-    //     if (this.dataPurchased[0].dropshippingFee !== 0) {
-    //       this.dropshippingFee = this.dataPurchased[0].dropshippingFee
-    //     }
-
-    //     console.log('COST', this.cost)
-    //     console.log('TOTAL', this.total)
-    //     console.log('Dropshiping Fee', this.dropshippingFee)
-    //   } catch (e) {
-    //     localStorage.removeItem('purchased')
-    //   }
-    // }
   }
 }
 </script>
@@ -220,21 +280,18 @@ input:focus, textarea:focus, select:focus{
 .words {
   float: right;
   position: absolute;
-  z-index: 1;
+  font-size: 14px;
   margin-left: -32px;
   margin-top: 120px;
 }
 
-.success {
+.success, .success-textarea {
   color: #1BD97B;
   border: 1px solid #1BD97B;
   border-radius: 3px;
 }
 
 .success-textarea {
-  color: #1BD97B;
-  border: 1px solid #1BD97B;
-  border-radius: 3px;
   height: 140px;
   overflow: hidden;
 }
@@ -288,6 +345,11 @@ input:focus, textarea:focus, select:focus{
   margin-top: 180px;
 }
 
+.cost, .dropshipping {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+}
+
 .col-50 {
   -ms-flex: 50%; /* IE10 */
   flex: 50%;
@@ -315,7 +377,7 @@ p.back {
 }
 
 .dropshipper {
-  padding: 0;
+  padding: 0 10px;
   margin-top: 50px;
 }
 
@@ -378,6 +440,7 @@ p.back {
 .send-as {
   padding-left: 26px;
   font-size: 14px;
+  color: rgba(45, 42, 64, 0.8);
 }
 
 .checkbox-label input:checked ~ .checkbox-custom::after {
@@ -402,6 +465,11 @@ p.back {
 .summary-title {
   margin-top: 40px;
   margin-bottom: 10px;
+}
+
+.items-purchased {
+  opacity: 0.6;
+  font-size: 14px;
 }
 
 // Textbox
@@ -429,11 +497,10 @@ textarea {
   padding-top: 20px;
   width: 100%;
   resize: none;
-  // padding-bottom: 0;
   margin-bottom: 0;
 }
 
-label.textbox, .input-group .input-dropshipper{
+label.textbox, .input-group .textbox{
   color: #999;
   padding-left: 10px;
   font-size: 16px;
@@ -448,12 +515,13 @@ label.textbox, .input-group .input-dropshipper{
 
 input:focus ~ label,
 textarea:focus ~ label,
-input:valid ~ label,
+input:valid + label,
 textarea:valid + label {
   transform: translate3d(0, -100%, 0);
   font-size: 14px;
 }
 
+// button
 .btn {
   background-color: #FF8A00;
   color: white;
@@ -470,10 +538,10 @@ textarea:valid + label {
   background-color: rgba(253, 140, 63, 0.8);
 }
 
-span.price {
+.price {
   float: right;
-  color: black;
   font-weight: bold;
+  color: rgba(0, 0, 0, 1)
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
@@ -491,6 +559,27 @@ span.price {
 
   .container-title {
     width: 100%;
+  }
+
+  // Send as dropshipper
+  .dropshipper {
+    padding: 0 10px;
+    margin: 5px;
+  }
+
+  .send-as {
+    padding-left: 26px;
+    font-size: 14px;
+    color: rgba(45, 42, 64, 0.8);
+  }
+
+  // Checkbox
+  .checkbox-container {
+    box-sizing: border-box;
+    // color: rgba(45, 42, 64, 0.8);
+    margin-top: 10px;
+    // margin-bottom: 28px;
+    margin-left: 8px;
   }
 }
 </style>

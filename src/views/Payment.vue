@@ -79,6 +79,7 @@
 <script>
 // @ is an alias to /src
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
+import { formatPrice } from '@/helper.js'
 
 export default {
   name: 'Delivery',
@@ -117,10 +118,7 @@ export default {
     }
   },
   methods: {
-    formatPrice (value) {
-      const val = (value / 1).toFixed(2).replace('.', ',')
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-    },
+    formatPrice,
     totalCost () {
       if (this.price) {
         this.allTotal = this.total + this.price
@@ -344,18 +342,13 @@ p.back {
 
 .cost {
   margin-top: 92px;
-  opacity: 0.6;
+  color:rgba(0, 0, 0, 0.6);
   font-size: 14px;
 }
 
-.dropshipping {
-  opacity: 0.6;
+.dropshipping, .shipment-price {
+  color:rgba(0, 0, 0, 0.6);
   font-size: 14px;
-}
-
-.shipment-price {
-  font-size: 14px;
-  opacity: 0.6;
 }
 
 .btn {
