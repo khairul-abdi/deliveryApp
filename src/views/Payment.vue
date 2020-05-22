@@ -61,7 +61,7 @@
           <p class="items-purchased">10 items purchased</p>
           <hr class="line">
 
-          <p class="dev-estimation">Delivery estimation</p>
+          <p class="dev-estimation" v-if="courier">Delivery estimation</p>
           <p class="courier-send" v-if="courier">{{ deliveryTime }} by {{ courier }}</p>
           <p class="cost">Cost of goods <span class="price">{{ cost ? formatPrice(cost) : 0 }}</span></p>
           <p class="dropshipping">Dropshipping Fee <span class="price">{{ dropshippingFee ? formatPrice(dropshippingFee) : 0 }}</span></p>
