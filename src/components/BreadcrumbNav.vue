@@ -110,8 +110,4 @@ span.process {
     width: 100vw;
   }
 }
-
-@media (max-width: 576px) {
-
-}
 </style>

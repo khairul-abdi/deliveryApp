@@ -4,7 +4,7 @@
     <div class="row box">
       <div class="col-75">
         <div class="container">
-          <div class="col-100" style="width: 100%; padding-left: 250px;">
+          <div class="col-100" style="text-align:center;">
             <h1 class="delivery underline">Thank you</h1>
               <p class="order-id">Order ID: {{generate()}}</p>
               <p class="description">
@@ -18,16 +18,18 @@
       </div>
       <div class="col-25">
         <div class="container">
-          <h3 class="summary-title">Summary</h3>
-          <p class="items-purchased">10 items purchased</p>
+          <div class="summary">
+            <h3 class="summary-title">Summary</h3>
+            <p class="items-purchased">10 items purchased</p>
 
-          <hr class="line">
-          <p class="dev-estimation">Delivery estimation</p>
-          <p class="courier-send">{{deliveryTime}} by {{courier}}</p>
+            <hr class="line">
+            <p class="dev-estimation">Delivery estimation</p>
+            <p class="courier-send">{{deliveryTime}} by {{courier}}</p>
 
-          <hr class="line">
-          <p class="dev-estimation">Payment method</p>
-          <p class="courier-send">{{payments}}</p>
+            <hr class="line">
+            <p class="dev-estimation">Payment method</p>
+            <p class="courier-send">{{payments}}</p>
+          </div>
           <p class="cost">Cost of goods
             <span class="price">{{ formatPrice(cost) }}</span>
           </p>
@@ -94,9 +96,7 @@ export default {
         this.cost = this.dataPurchased[1].cost
         this.allTotal = this.dataPurchased[4].allTotal
         this.dropshippingFee = this.dataPurchased[0].dropshippingFee
-        // this.dataPurchased[3].process = 1
       } catch (e) {
-        console.log(e)
         localStorage.removeItem('purchased')
       }
     }
@@ -312,8 +312,7 @@ span.price {
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
 @media (max-width: 768px) {
   .row {
-    // flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: column-reverse;
     justify-content: center;
   }
   .col-25 {
@@ -329,12 +328,32 @@ span.price {
   }
 
   .wrap {
-    flex-wrap: wrap;
     padding: 0 10px;
   }
-}
 
-@media (max-width: 576px) {
+  .delivery{
+    font-size: 24px;
+    margin-top: 0;
+  }
 
+  .summary {
+    text-align: center;
+  }
+
+  hr.line {
+    margin: auto;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .col-75 {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .col-25 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
 }
 </style>

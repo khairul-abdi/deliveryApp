@@ -25,12 +25,7 @@ h3,h1 {
   color: #FF8A00;
 }
 
-h1 {
-  // font-size: 5.9vw;
-  // font-size:10vw
-}
-
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   body {
     margin: 0;
   }

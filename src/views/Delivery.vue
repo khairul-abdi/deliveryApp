@@ -569,9 +569,6 @@ textarea:valid + label {
 
   .delivery{
     font-size: 24px;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bold;
   }
 
   .container {

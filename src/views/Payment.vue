@@ -4,7 +4,9 @@
     <div class="row box">
       <div class="col-75">
         <div class="container">
-          <a href="/" class="link-to-cart" @click="backToDelivery()"><p class="back">&#8592; Back to delivery</p></a>
+          <a href="/" class="link-to-cart" @click="backToDelivery()">
+            <p class="back">&#8592; Back to delivery</p>
+          </a>
           <h1 class="delivery underline">Shipment</h1>
           <div class="row wrap">
             <div
@@ -65,10 +67,21 @@
           <p class="courier-send" v-if="courier">{{ deliveryTime }} by {{ courier }}</p>
           <p class="cost">Cost of goods <span class="price">{{ cost ? formatPrice(cost) : 0 }}</span></p>
           <p class="dropshipping">Dropshipping Fee <span class="price">{{ dropshippingFee ? formatPrice(dropshippingFee) : 0 }}</span></p>
-          <p class="shipment-price" v-if="price"><span style="font-weight: bold;">{{ courier }}</span> shipment <span class="price">{{ price ? formatPrice(price) : 0 }}</span></p>
+          <p class="shipment-price" v-if="price">
+            <span style="font-weight: bold;">{{ courier }}</span>
+              shipment <span class="price">{{ price ? formatPrice(price) : 0 }}
+            </span>
+          </p>
           <hr>
           <h3>Total <span class="price" style="color: #FF8A00;">{{ totalCost() }}</span></h3>
-          <button to="/finish" type="submit" tag="button" v-if="payments" class="btn" @click="addPurchased">Payment with {{payments}}</button>
+          <button
+            to="/finish"
+            type="submit"
+            v-if="payments"
+            class="btn"
+            @click="addPurchased">
+            Payment with {{payments}}
+          </button>
           <button to="" type="submit" tag="button" v-else class="btn">Payment with ....</button>
         </div>
       </div>
@@ -96,7 +109,6 @@ export default {
       price: 0,
       payments: '',
       deliveryTime: 0,
-      email: '',
       dataPurchased: [],
       msg: [],
       indexSuccess: null,
@@ -126,7 +138,6 @@ export default {
         this.allTotal = this.total
       }
 
-      console.log('ALL TOTAL', this.allTotal)
       return this.formatPrice(this.allTotal)
     },
     shipmentSelect (index) {
@@ -396,9 +407,9 @@ span.price {
     flex-wrap: wrap;
     padding: 0 10px;
   }
-}
 
-@media (max-width: 576px) {
-
+  .delivery, .payment{
+    font-size: 24px;
+  }
 }
 </style>
