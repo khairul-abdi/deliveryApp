@@ -2,13 +2,13 @@
   <div class="container-title">
     <ul class="breadcrumb">
       <li>
-        <router-link to="/"><span class="circle"  :class="{ process: process >= 1 }">1 </span> Delivery</router-link>
+        <router-link to="/" class="navbar"><span class="circle"  :class="{ process: process >= 1 }">1 </span> Delivery</router-link>
       </li>
       <li>
-        <router-link to="/payment"><span class="circle" :class="{ process: process >= 2 }">2 </span> Payment</router-link>
+        <router-link to="/payment" class="navbar"><span class="circle" :class="{ process: process >= 2 }">2 </span> Payment</router-link>
       </li>
       <li>
-        <router-link to="/finish"><span class="circle" :class="{ process: process >= 3 }">3 </span> Finish</router-link>
+        <router-link to="/finish" class="navbar"><span class="circle" :class="{ process: process >= 3 }">3 </span> Finish</router-link>
       </li>
     </ul>
   </div>
@@ -110,4 +110,11 @@ span.process {
     width: 100vw;
   }
 }
+
+@media (max-width: 576px) {
+ .navbar {
+    font-size: 10px;
+  }
+}
+
 </style>
