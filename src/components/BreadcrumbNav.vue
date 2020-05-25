@@ -54,6 +54,7 @@ export default {
 }
 
 ul.breadcrumb {
+  width: 100%;
   font-weight: 500;
   padding: 10px 16px;
   list-style: none;
@@ -100,5 +101,17 @@ span.circle:hover {
 span.process {
   opacity: 1;
   background-color: #FF8A00;
+}
+
+@media (max-width: 768px) {
+  .container-title {
+    justify-content: center;
+    text-align: center;
+    width: 100vw;
+  }
+}
+
+@media (max-width: 576px) {
+
 }
 </style>

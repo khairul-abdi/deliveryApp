@@ -84,7 +84,7 @@
                       <span class="send-as">Send as dropshipper </span>
                     </label>
                   </div>
-                  <div v-show="checked">
+                  <div v-show="checked" style="clear:right">
                     <div class="input-group" :class="{success: msg.dropshipName == 1, warning: msg.dropshipName == 0}">
                       <input
                         type="text"
@@ -206,6 +206,7 @@ export default {
       } else {
         this.msg.email = 0
       }
+      console.log('ISI ===>', this.msg)
     },
     validatePhone (value) {
       const regexPhone = /^[0-9-+\s()]*$/
@@ -387,7 +388,8 @@ p.back {
   color: rgba(45, 42, 64, 0.8);
   margin-top: 55px;
   margin-bottom: 28px;
-  margin-left: 260px;
+  // margin-left: 260px;
+  float: right;
 }
 
 .checkbox-label input {
@@ -476,6 +478,8 @@ p.back {
 .input-group {
   position: relative;
   margin: 10px 5px 10px 0;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
 input[type="text"],input[type="tel"],input[type="email"] {
@@ -545,11 +549,17 @@ textarea:valid + label {
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (also change the direction - make the "cart" column go on top) */
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .row {
     flex-direction: column;
   }
+
+  .col-75 {
+    margin: 0;
+  }
+
   .col-25 {
+    margin-top: 0;
     margin-bottom: 20px;
   }
 
@@ -557,18 +567,26 @@ textarea:valid + label {
     margin-top: 40px;
   }
 
-  .container-title {
-    width: 100%;
+  .delivery{
+    font-size: 24px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+  }
+
+  .container {
+    padding: 0 20px 15px 20px;
+    border-radius: 3px;
   }
 
   // Send as dropshipper
   .dropshipper {
     padding: 0 10px;
-    margin: 5px;
+    margin: 0 !important;
   }
 
   .send-as {
-    padding-left: 26px;
+    // padding-left: 26px;
     font-size: 14px;
     color: rgba(45, 42, 64, 0.8);
   }
@@ -579,7 +597,21 @@ textarea:valid + label {
     // color: rgba(45, 42, 64, 0.8);
     margin-top: 10px;
     // margin-bottom: 28px;
-    margin-left: 8px;
+    // margin-left: 8px;
   }
+
+  .summary-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .cost {
+    margin-top: 40px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
 }
 </style>
